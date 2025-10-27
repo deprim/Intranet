@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main class="container my-5">
+    <div class="row">
+        <div class="col-lg-10 offset-lg-1">
+            <div class="card shadow-sm mb-4 p-3 border-start border-5 border-danger">
+                <h1 class="h4 m-0 text-danger fw-bold">Walletto News</h1>
+            </div>
+            <!-- Empty State -->
+            <div th:if="${#lists.isEmpty(newsList)}" class="alert alert-info">
+                No news available yet
+            </div>
+
+            <!-- News List -->
+            <div th:each="news : ${newsList}" class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h2 class="h4 mb-0">
+                            <a th:href="@{/news/{id}(id=${news.id})}"
+                               th:text="${news.title}"
+                               class="text-decoration-none text-dark">
+                                News Title
+                            </a>
+                        </h2>
+                        <span class="badge bg-primary"
+                              th:text="${news.publishedDate}">
+                                Oct 25, 2025
+                            </span>
+                    </div>
+
+                    <p class="text-muted mb-2" th:if="${news.author}">
+                        Author: <span th:text="${news.author}">John Doe</span>
+                    </p>
+
+                    <p th:text="${news.content}" class="mb-3">
+                        Full text of the news. This can be a long description of an event,
+                        announcement, or important information for company employees...
+                    </p>
+
+                    <div class="text-end">
+                        <a th:href="@{/news/{id}(id=${news.id})}"
+                           class="btn btn-outline-primary btn-sm">
+                            Read More
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <nav th:if="${totalPages > 1}" aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link" th:href="@{/news(page=${currentPage - 1})}">&laquo;</a>
+                    </li>
+
+                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                        class="page-item"
+                        th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link" th:href="@{/news(page=${i})}" th:text="${i + 1}">1</a>
+                    </li>
+
+                    <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                        <a class="page-link" th:href="@{/news(page=${currentPage + 1})}">&raquo;</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

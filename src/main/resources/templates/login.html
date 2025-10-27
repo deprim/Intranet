@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/header :: head}">
+    <title>Login</title>
+</head>
+
+<body class="login-page">
+<div class="login-container">
+    <div class="login-card shadow-sm">
+
+        <!-- Логотип -->
+        <div class="text-center mb-4">
+            <img th:src="@{/images/logo.webp}" alt="Logo" class="login-logo mb-3"
+                 onerror="this.style.display='none'">
+            <h1 class="h4 text-primary mb-2">Welcome Back</h1>
+            <p class="text-muted">Please sign in to your account</p>
+        </div>
+
+        <!-- Сообщения об ошибках -->
+        <div th:if="${param.error}" class="alert alert-danger">
+            Invalid username or password.
+        </div>
+        <div th:if="${param.logout}" class="alert alert-success">
+            You have been logged out successfully.
+        </div>
+
+        <!-- Форма логина -->
+        <form action="/process_login" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label fw-semibold">Username</label>
+                <input type="text" class="form-control" id="username" name="username">
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label fw-semibold">Password</label>
+                <input type="password" class="form-control" id="password" name="password">
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

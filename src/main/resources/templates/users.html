@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head}"></head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="page-title mb-0">Employees</h1>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <!-- Обратите внимание: все параметры фильтрации, включая showInactive, должны быть переданы обратно -->
+            <form th:action="@{/user}" method="get" class="row g-3">
+                <!-- Search -->
+                <div class="col-md-3">
+                    <label for="search" class="form-label">Search</label>
+                    <input type="text"
+                           class="form-control"
+                           id="search"
+                           name="search"
+                           th:value="${search}"
+                           placeholder="Name, email, or username...">
+                </div>
+
+                <!-- Department Filter (Теперь динамический) -->
+                <div class="col-md-3">
+                    <label for="department" class="form-label">Department</label>
+                    <select class="form-select" id="department" name="department">
+                        <option value="">All Departments</option>
+                        <!-- ДИНАМИЧЕСКИЕ ДЕПАРТАМЕНТЫ -->
+                        <option th:each="deptName : ${allDepartments}"
+                                th:value="${deptName}"
+                                th:text="${deptName}"
+                                th:selected="${department == deptName}">Development</option>
+                    </select>
+                </div>
+
+                <!-- Sort By (Уменьшен до col-md-2) -->
+                <div class="col-md-2">
+                    <label for="sortBy" class="form-label">Sort By</label>
+                    <select class="form-select" id="sortBy" name="sortBy">
+                        <option value="fullName" th:selected="${sortBy == 'fullName'}">Name</option>
+                        <option value="department" th:selected="${sortBy == 'department'}">Department</option>
+                    </select>
+                </div>
+
+                <!-- ГАЛОЧКА "SHOW INACTIVE USERS" (col-md-2) -->
+                <div class="col-md-2">
+                    <!-- Пустая метка для выравнивания по высоте с другими метками (form-label) -->
+                    <label class="form-label">&nbsp;</label>
+                    <div class="form-check pt-1">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="showInactive"
+                               name="showInactive"
+                               value="true"
+                               th:checked="${showInactive}">
+                        <label class="form-check-label" for="showInactive">
+                            Show Inactive
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Apply Button (col-md-2) -->
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-outline-primary w-100">
+                        Apply Filters
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h3 class="h2 mb-0 text-primary" th:text="${totalUsers}">0</h3>
+                    <p class="text-muted mb-0">Total Employees</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h3 class="h2 mb-0 text-success" th:text="${activeUsers}">0</h3>
+                    <p class="text-muted mb-0">Active</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h3 class="h2 mb-0 text-warning" th:text="${inactiveUsers}">0</h3>
+                    <p class="text-muted mb-0">Inactive</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h3 class="h2 mb-0 text-info" th:text="${departmentCount}">0</h3>
+                    <p class="text-muted mb-0">Departments</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div th:if="${#lists.isEmpty(users)}" class="alert alert-info">
+        <h5 class="alert-heading">No employees found</h5>
+        <p class="mb-0">Try adjusting your search or filter criteria.</p>
+    </div>
+
+    <!-- Employees Table -->
+    <div th:if="${!#lists.isEmpty(users)}" class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Department</th>
+                        <th>Position</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${users}">
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="employee-avatar me-3"
+                                     th:text="${#strings.substring(user.fullName, 0, 1) + #strings.substring(#strings.substringAfter(user.fullName, ' '), 0, 1)}">
+                                    JD
+                                </div>
+                                <div>
+                                    <div class="fw-semibold" th:text="${user.fullName}">John Doe</div>
+                                    <small class="text-muted" th:text="'@' + ${user.username}">@johndoe</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td th:text="${user.email}">john.doe@company.com</td>
+                        <td>
+                            <span class="badge bg-primary-soft" th:text="${user.department}">Development</span>
+                        </td>
+                        <td th:text="${user.position ?: '-'}">Senior Developer</td>
+                        <td>
+                            <span th:if="${user.isActive}" class="badge bg-success">Active</span>
+                            <span th:unless="${user.isActive}" class="badge bg-warning">Inactive</span>
+                        </td>
+                        <td>
+                            <!-- Кнопка View доступна всем -->
+                            <a th:href="@{/user/{id}(id=${user.id})}"
+                               class="btn btn-sm btn-outline-primary me-1">
+                                View
+                            </a>
+                            <!-- 1. Кнопка Edit ВИДНА ТОЛЬКО АДМИНАМ -->
+                            <a th:href="@{/user/{id}/edit(id=${user.id})}"
+                               class="btn btn-sm btn-outline-secondary"
+                               sec:authorize="hasRole('ADMIN')">
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <nav th:if="${totalPages > 1}" aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <!-- Параметры showInactive добавлены в ссылки пагинации -->
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/user(page=${currentPage - 1}, search=${search}, department=${department}, sortBy=${sortBy}, showInactive=${showInactive})}">&laquo;</a>
+                    </li>
+
+                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                        class="page-item"
+                        th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link"
+                           th:href="@{/user(page=${i}, search=${search}, department=${department}, sortBy=${sortBy}, showInactive=${showInactive})}"
+                           th:text="${i + 1}">1</a>
+                    </li>
+
+                    <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/user(page=${currentPage + 1}, search=${search}, department=${department}, sortBy=${sortBy}, showInactive=${showInactive})}">&raquo;</a>
+                    </li>
+                </ul>
+            </nav>
+
+
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
