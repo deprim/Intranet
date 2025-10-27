@@ -32,6 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/login", "/process_login").permitAll()
                         .requestMatchers("/register").hasRole("ADMIN")
+                        .requestMatchers("/news/create").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 ).csrf(csrf -> csrf.disable());
 

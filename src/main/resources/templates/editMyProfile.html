@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head}"></head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main class="container my-5">
+    <div class="mb-4">
+        <a th:href="@{/profile}" class="btn btn-outline-secondary btn-sm">
+            &larr; Back to Profile
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 offset-lg-1">
+            <h1 class="page-title mb-4">Edit My Profile</h1>
+
+            <!-- Форма: добавлен enctype="multipart/form-data" для загрузки файла -->
+            <form th:action="@{/profile/edit}" th:object="${profileForm}" method="post" class="row g-4" enctype="multipart/form-data">
+
+                <!-- КРИТИЧЕСКИ ВАЖНЫЕ СКРЫТЫЕ ПОЛЯ -->
+                <!-- Они гарантируют, что обязательные поля, которые пользователь не редактирует, будут отправлены обратно в контроллер для прохождения @Valid -->
+                <input type="hidden" th:field="*{id}">
+                <input type="hidden" th:field="*{username}">
+                <input type="hidden" th:field="*{password}">
+                <input type="hidden" th:field="*{role}">
+
+                <!-- Поля даты также отправляются скрытно, так как они могут быть @NotNull на сервере -->
+<!--                <input type="hidden" th:field="*{hireDate}">-->
+<!--                <input type="hidden" th:field="*{dateOfBirth}">-->
+                <!-- КОНЕЦ СКРЫТЫХ ПОЛЕЙ -->
+
+                <!-- Глобальные ошибки валидации -->
+                <div class="col-12" th:if="${#fields.hasGlobalErrors()}">
+                    <div class="alert alert-danger">
+                        <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">Global error message.</p>
+                    </div>
+                </div>
+
+                <!-- Левая колонка - Аватар и Загрузка файла -->
+                <div class="col-lg-4">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Profile Picture</h5>
+                        </div>
+                        <div class="card-body text-center">
+                            <!-- Отображение текущего аватара -->
+                            <div class="profile-avatar-container mx-auto mb-3">
+                                <th:block th:if="${profileForm.avatarUrl != null and profileForm.avatarUrl != ''}">
+                                    <img th:src="${profileForm.avatarUrl}"
+                                         alt="Avatar"
+                                         class="profile-avatar-large">
+                                </th:block>
+                                <th:block th:unless="${profileForm.avatarUrl != null and profileForm.avatarUrl != ''}">
+                                    <div class="profile-avatar-large d-flex align-items-center justify-content-center bg-secondary text-white fw-bold"
+                                         style="font-size: 2.5rem;"
+                                         th:with="initials=${#strings.substring(profileForm.fullName, 0, 1) + (#strings.contains(profileForm.fullName, ' ') ? #strings.substring(profileForm.fullName, #strings.indexOf(profileForm.fullName, ' ') + 1, #strings.indexOf(profileForm.fullName, ' ') + 2) : '')}"
+                                         th:text="${initials}">
+                                        JD
+                                    </div>
+                                </th:block>
+                            </div>
+
+                            <!-- Поле для загрузки Аватара (Файл) -->
+                            <div class="mb-3 text-start">
+                                <label for="avatarFile" class="form-label small text-muted">Upload New Avatar (File)</label>
+                                <input type="file" class="form-control" id="avatarFile" name="avatarFile" accept="image/*">
+                            </div>
+                            <small class="text-muted">Choose an image file (.jpg, .png, etc.) from your computer.</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Правая колонка - Поля формы -->
+                <div class="col-lg-8">
+                    <!-- Личная информация -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Personal Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <!-- Full Name -->
+                                <div class="col-md-6">
+                                    <label for="fullName" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="fullName" th:field="*{fullName}" required
+                                           th:classappend="${#fields.hasErrors('fullName') ? 'is-invalid' : ''}">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Full Name Error</div>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" th:field="*{email}" required
+                                           th:classappend="${#fields.hasErrors('email') ? 'is-invalid' : ''}">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
+                                </div>
+
+                                <!-- Phone Number -->
+                                <div class="col-md-6">
+                                    <label for="phoneNumber" class="form-label">Phone Number (Optional)</label>
+                                    <input type="tel" class="form-control" id="phoneNumber" th:field="*{phoneNumber}"
+                                           placeholder="+1 (555) 123-4567"
+                                           th:classappend="${#fields.hasErrors('phoneNumber') ? 'is-invalid' : ''}">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Phone Error</div>
+                                </div>
+
+                                <!-- Date of Birth (Исправленная привязка th:field) -->
+                                <div class="col-md-6">
+                                    <label for="dateOfBirth" class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" id="dateOfBirth" th:field="*{dateOfBirth}"
+                                           th:classappend="${#fields.hasErrors('dateOfBirth') ? 'is-invalid' : ''}">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}">DOB Error</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Рабочая информация -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Work Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <!-- Department -->
+                                <div class="col-md-6">
+                                    <label for="department" class="form-label">Department</label>
+                                    <input type="text" class="form-control" id="department" th:field="*{department}"
+                                           th:classappend="${#fields.hasErrors('department') ? 'is-invalid' : ''}">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('department')}" th:errors="*{department}">Department Error</div>
+                                </div>
+
+                                <!-- Position -->
+                                <div class="col-md-6">
+                                    <label for="position" class="form-label">Position</label>
+                                    <input type="text" class="form-control" id="position" th:field="*{position}"
+                                           th:classappend="${#fields.hasErrors('position') ? 'is-invalid' : ''}">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('position')}" th:errors="*{position}">Position Error</div>
+                                </div>
+
+                                <!-- Hire Date (Исправленная привязка th:field) -->
+                                <div class="col-md-6">
+                                    <label for="hireDate" class="form-label">Hire Date</label>
+                                    <input type="date" class="form-control" id="hireDate" th:field="*{hireDate}"
+                                           th:classappend="${#fields.hasErrors('hireDate') ? 'is-invalid' : ''}">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('hireDate')}" th:errors="*{hireDate}">Hire Date Error</div>
+                                </div>
+
+                                <!-- Username (Только для просмотра) -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Username</label>
+                                    <!-- Отображаем для пользователя, но поле th:field="*{username}" уже в скрытом input'е. -->
+                                    <input type="text" class="form-control" th:value="${profileForm.username}" readonly>
+                                    <small class="text-muted">Cannot be changed.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Кнопки действий -->
+                    <div class="d-flex justify-content-end gap-2">
+                        <a th:href="@{/profile}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-success">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

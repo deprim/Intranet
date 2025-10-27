@@ -104,6 +104,7 @@ public class UserService {
 
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
+        user.setActive(true);
         userRepository.save(user);
     }
 
@@ -140,6 +141,46 @@ public class UserService {
             departments.add(user.getDepartment());
         }
         return departments;
+    }
+
+    @Transactional
+    public void editMyProfile(User oldUser, User editedUser) {
+
+//        editedUser.setId(oldUser.getId()); // can't be edited
+//        editedUser.setUsername(oldUser.getUsername()); // cam't be edited
+//        editedUser.setPassword(oldUser.getPassword()); // cam't be edited
+//        editedUser.setEmail(oldUser.getEmail()); // may be edited
+//        editedUser.setFullName(oldUser.getFullName()); // may be edited
+//        editedUser.setDepartment(oldUser.getDepartment()); // may be edited
+//        editedUser.setDateOfBirth(oldUser.getDateOfBirth()); // may be edited
+//        editedUser.setPhoneNumber(oldUser.getPhoneNumber()); // may be edited
+//        editedUser.setPosition(oldUser.getPosition()); // may be edited
+//        editedUser.setHireDate(oldUser.getHireDate()); // may be edited if not edited it null
+//        editedUser.setActive(oldUser.isActive()); // can't be edited
+//        editedUser.setCreatedAt(oldUser.getCreatedAt()); // should be by default
+//        editedUser.setUpdatedAt(LocalDateTime.now()); // should be updated for NOW time
+//        editedUser.setRole(oldUser.getRole()); // can't be edited
+
+
+
+        editedUser.setId(oldUser.getId()); // can't be edited
+        editedUser.setUsername(oldUser.getUsername()); // cam't be edited
+        editedUser.setPassword(oldUser.getPassword()); // cam't be edited
+        editedUser.setActive(oldUser.isActive()); // can't be edited
+        editedUser.setCreatedAt(oldUser.getCreatedAt()); // should be by default
+        editedUser.setUpdatedAt(LocalDateTime.now()); // should be updated for NOW time
+        editedUser.setRole(oldUser.getRole()); // can't be edited
+
+        if (editedUser.getHireDate() == null) {
+            editedUser.setHireDate(oldUser.getHireDate());
+        } else if (editedUser.getDateOfBirth() == null) {
+            editedUser.setDateOfBirth(oldUser.getDateOfBirth());
+        }
+
+        userRepository.save(editedUser);
+
+
+
     }
 
 

@@ -102,7 +102,7 @@ main {
 }
 
 .logo-img {
-    height: 40px;
+    height: 60px;
     width: auto;
     max-width: 150px;
     object-fit: contain;
@@ -167,6 +167,92 @@ main {
     border-bottom: 3px solid var(--primary-red);
     padding-bottom: 0.5rem;
     display: inline-block;
+}
+
+/* --- Quick Links Styles --- */
+.list-group-item-action:hover {
+    background-color: rgba(211, 47, 47, 0.05); /* Легкий красный фон при наведении */
+    color: var(--primary-red-dark);
+}
+.list-group-item-action i {
+    /* Чтобы иконки в Quick Links использовали цвет Primary Red */
+    color: var(--primary-red) !important;
+}
+
+/* --- Calendar Widget Styles --- */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    gap: 2px;
+}
+.day-header {
+    font-weight: bold;
+    font-size: 0.8rem;
+    color: var(--secondary-grey);
+    padding: 5px 0;
+}
+.day-cell {
+    padding: 5px 0;
+    cursor: default;
+    font-size: 0.9rem;
+}
+.current-day {
+    background-color: var(--primary-red); /* bg-primary */
+    color: white;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+.current-day:hover {
+    background-color: var(--primary-red-dark);
+}
+
+/* NEW: Style for dates with events */
+.event-day {
+    position: relative;
+    border: 2px solid var(--primary-red-light);
+    color: var(--text-dark);
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 4px; /* Важно для равномерности */
+}
+.event-day:hover {
+    background-color: var(--primary-red-light);
+    color: white;
+    border-color: var(--primary-red-light);
+}
+
+/* If the day is today AND has an event, combine styles */
+.current-day.event-day {
+    background-color: var(--primary-red-dark); /* Darker red for emphasis */
+    border-color: white;
+    color: white;
+}
+.current-day.event-day:hover {
+    background-color: #a31515; /* Even darker hover */
+}
+
+
+/* === Профиль пользователя (Profile) === */
+
+.profile-avatar-container {
+    /* Контейнер аватара: задает размер и форму */
+    width: 150px; /* Фиксированная ширина */
+    height: 150px; /* Фиксированная высота (делаем его квадратным) */
+    margin: 0 auto; /* Центрирование внутри card-body */
+    overflow: hidden;
+    border-radius: 50%; /* Делает контейнер круглым */
+    border: 4px solid white; /* Добавляем белый ободок для выделения на фоне карточки */
+    box-shadow: 0 0 0 2px var(--border-grey); /* Легкая серая рамка */
+}
+
+.profile-avatar-large {
+    /* Само изображение: заполняет контейнер, сохраняя пропорции */
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ключевой стиль: обрезает изображение, чтобы оно полностью заполнило контейнер без искажения */
+    display: block; /* Убирает лишний отступ под изображением */
 }
 
 /* === Карточки === */

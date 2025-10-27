@@ -36,7 +36,8 @@
                         Author: <span th:text="${news.author}">John Doe</span>
                     </p>
 
-                    <p th:text="${news.content}" class="mb-3">
+                    <!-- ДОБАВЛЕН news-content-preview КЛАСС ДЛЯ ОБРЕЗКИ ЧЕРЕЗ JS -->
+                    <p th:text="${news.content}" class="mb-3 news-content-preview">
                         Full text of the news. This can be a long description of an event,
                         announcement, or important information for company employees...
                     </p>
@@ -73,5 +74,24 @@
 </main>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const limit = 300;
+        // Выбираем все элементы с текстом новости
+        const contentElements = document.querySelectorAll('.news-content-preview');
+
+        contentElements.forEach(p => {
+            // Trim() убирает лишние пробелы/переносы строк, которые могут быть добавлены Thymeleaf
+            let fullText = p.textContent.trim();
+
+            // Если полный текст длиннее лимита, обрезаем его
+            if (fullText.length > limit) {
+                // Обрезаем до лимита, снова обрезаем пробелы и добавляем многоточие
+                p.textContent = fullText.substring(0, limit).trim() + '...';
+            }
+        });
+    });
+</script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.dandek.Intranet.Intranet.controller;
 
+import com.dandek.Intranet.Intranet.model.News;
 import com.dandek.Intranet.Intranet.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,12 @@ public class NewsController {
         model.addAttribute("news", newsService.findById(id));
         return "showNews";
 
+    }
+
+    @GetMapping("/create")
+    public String create(Model model) {
+        model.addAttribute("news", new News());
+        return "createNews";
     }
 
 

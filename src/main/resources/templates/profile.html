@@ -16,9 +16,23 @@
         <div class="col-lg-4">
             <div class="card shadow-sm">
                 <div class="card-body text-center">
-                    <div class="employee-avatar-large mx-auto mb-3"
-                         th:text="${user.username}">
-                        JD
+                    <!-- Avatar Section (Updated to support image or initials) -->
+                    <div class="profile-avatar-container mx-auto mb-3">
+                        <th:block th:if="${user.avatarUrl != null and user.avatarUrl != ''}">
+                            <!-- Display actual image if URL exists -->
+                            <img th:src="${user.avatarUrl}"
+                                 alt="Avatar"
+                                 class="profile-avatar-large">
+                        </th:block>
+                        <th:block th:unless="${user.avatarUrl != null and user.avatarUrl != ''}">
+                            <!-- Display Initials (Fallback) if no URL -->
+                            <div class="profile-avatar-large d-flex align-items-center justify-content-center bg-secondary text-white fw-bold"
+                                 style="font-size: 2.5rem;"
+                                 th:with="initials=${#strings.substring(user.fullName, 0, 1) + (#strings.contains(user.fullName, ' ') ? #strings.substring(user.fullName, #strings.indexOf(user.fullName, ' ') + 1, #strings.indexOf(user.fullName, ' ') + 2) : '')}"
+                                 th:text="${initials}">
+                                JD
+                            </div>
+                        </th:block>
                     </div>
 
                     <h2 class="h4 mb-1" th:text="${user.fullName}">John Doe</h2>

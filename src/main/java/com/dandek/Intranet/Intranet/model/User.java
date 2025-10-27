@@ -71,6 +71,9 @@ public class User {
     @NotBlank(message = "Role is required")
     private String role;
 
+    @Transient
+    private String avatarUrl;
+
 
     public User() {
     }
@@ -87,7 +90,8 @@ public class User {
                 LocalDateTime createdAt,
                 LocalDateTime updatedAt,
                 String role,
-                String department) {
+                String department,
+                String avatarUrl) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -101,6 +105,7 @@ public class User {
         this.updatedAt = updatedAt;
         this.role = role;
         this.department = department;
+        this.avatarUrl = "/images/default_avatar.png";
     }
 
 
@@ -215,6 +220,16 @@ public class User {
     public void setRole(@NotBlank(message = "Role is required") String role) {
         this.role = role;
     }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+
 
     @Override
     public String toString() {

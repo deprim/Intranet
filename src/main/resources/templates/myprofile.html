@@ -27,16 +27,11 @@
                         <div class="card-body text-center">
                             <!-- Avatar -->
                             <div class="profile-avatar-container mb-3">
-                                <img th:if="${currentUser.avatarUrl}"
-                                     th:src="@{${currentUser.avatarUrl}}"
+                                <img th:src="${currentUser.avatarUrl != null ? currentUser.avatarUrl : '/images/default_avatar.png'}"
                                      alt="Avatar"
                                      class="profile-avatar-large">
-                                <div th:unless="${currentUser.avatarUrl}"
-                                     class="employee-avatar-large mx-auto"
-                                     th:text="${#strings.substring(currentUser.fullName, 0, 1) + #strings.substring(#strings.substringAfter(currentUser.fullName, ' '), 0, 1)}">
-                                    JD
-                                </div>
                             </div>
+
 
                             <!-- Name and Username -->
                             <h2 class="h4 mb-1" th:text="${currentUser.fullName}">John Doe</h2>
@@ -58,11 +53,11 @@
                             </div>
                             <div class="d-flex justify-content-between mb-2" th:if="${currentUser.hireDate}">
                                 <span class="text-muted">Joined:</span>
-                                <strong th:text="${#dates.format(currentUser.hireDate, 'MMM yyyy')}">Jan 2021</strong>
+                                <strong th:text="${#temporals.format(currentUser.hireDate, 'MMMM dd, yyyy')}">March 15, 1990</strong>
                             </div>
-                            <div class="d-flex justify-content-between mb-2" th:if="${currentUser.birthday}">
+                            <div class="d-flex justify-content-between mb-2" th:if="${currentUser.dateOfBirth}">
                                 <span class="text-muted">Birthday:</span>
-                                <strong th:text="${#dates.format(currentUser.birthday, 'MMMM dd')}">March 15</strong>
+                                <strong th:text="${#temporals.format(currentUser.dateOfBirth, 'MMMM dd, yyyy')}">March 15, 1990</strong>
                             </div>
                             <div class="d-flex justify-content-between">
                                 <span class="text-muted">Email:</span>
@@ -91,13 +86,13 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="text-muted small">Phone Number</label>
-                                    <p class="mb-0" th:text="${currentUser.phone ?: 'Not provided'}">+1 (555) 123-4567</p>
+                                    <p class="mb-0" th:text="${currentUser.phoneNumber ?: 'Not provided'}">+1 (555) 123-4567</p>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="text-muted small">Date of Birth</label>
-                                    <p class="mb-0" th:if="${currentUser.birthday}"
-                                       th:text="${#dates.format(currentUser.birthday, 'MMMM dd, yyyy')}">March 15, 1990</p>
-                                    <p class="mb-0 text-muted" th:unless="${currentUser.birthday}">Not provided</p>
+                                    <p class="mb-0" th:if="${currentUser.dateOfBirth}"
+                                       th:text="${#temporals.format(currentUser.dateOfBirth, 'MMMM dd, yyyy')}">March 15, 1990</p>
+                                    <p class="mb-0 text-muted" th:unless="${currentUser.dateOfBirth}">Not provided</p>
                                 </div>
                             </div>
                         </div>
@@ -121,7 +116,7 @@
                                 <div class="col-md-6">
                                     <label class="text-muted small">Hire Date</label>
                                     <p class="mb-0" th:if="${currentUser.hireDate}"
-                                       th:text="${#dates.format(currentUser.hireDate, 'MMMM dd, yyyy')}">January 15, 2021</p>
+                                       th:text="${#temporals.format(currentUser.hireDate, 'MMMM dd, yyyy')}">January 15, 2021</p>
                                     <p class="mb-0 text-muted" th:unless="${currentUser.hireDate}">Not recorded</p>
                                 </div>
                                 <div class="col-md-6">
@@ -152,12 +147,12 @@
                                 <div class="col-md-6">
                                     <label class="text-muted small">Account Created</label>
                                     <p class="mb-0" th:if="${currentUser.createdAt}"
-                                       th:text="${#dates.format(currentUser.createdAt, 'MMMM dd, yyyy')}">January 15, 2021</p>
+                                       th:text="${#temporals.format(currentUser.createdAt, 'MMMM dd, yyyy')}">January 15, 2021</p>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="text-muted small">Last Updated</label>
                                     <p class="mb-0" th:if="${currentUser.updatedAt}"
-                                       th:text="${#dates.format(currentUser.updatedAt, 'MMMM dd, yyyy')}">October 26, 2025</p>
+                                       th:text="${#temporals.format(currentUser.updatedAt, 'MMMM dd, yyyy')}">October 26, 2025</p>
                                 </div>
                             </div>
                         </div>
