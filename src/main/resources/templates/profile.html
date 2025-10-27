@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head}"></head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main class="container my-5">
+    <div class="mb-3">
+        <a th:href="@{/user}" class="btn btn-outline-secondary btn-sm">
+            &larr; Back to Employees
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <div class="employee-avatar-large mx-auto mb-3"
+                         th:text="${user.username}">
+                        JD
+                    </div>
+
+                    <h2 class="h4 mb-1" th:text="${user.fullName}">John Doe</h2>
+                    <p class="text-muted mb-2" th:text="${user.position}">Senior Developer</p>
+                    <p class="text-muted small mb-3" th:text="${'@' + user.username}">@johndoe</p>
+
+                    <span th:if="${user.active}" class="badge bg-success mb-3">Active Account</span>
+                    <span th:unless="${user.active}" class="badge bg-warning mb-3">Inactive Account</span>
+
+                    <div class="d-grid gap-2">
+                        <a th:href="@{/admin/users/{id}/edit(id=${user.id})}"
+                           class="btn btn-primary"
+                           sec:authorize="hasRole('ADMIN')">
+                            Edit Profile
+                        </a>
+
+                        <a th:href="${'mailto:' + user.email}" class="btn btn-outline-primary">
+                            Send Email
+                        </a>
+
+                        <form th:action="@{/admin/users/{id}/toggle-status(id=${user.id})}"
+                              method="post" class="d-inline"
+                              sec:authorize="hasRole('ADMIN')">
+                            <button type="submit" class="btn btn-outline-danger w-100">
+                                <span th:if="${user.active}">Deactivate Account</span>
+                                <span th:unless="${user.active}">Activate Account</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mt-4">
+                <div class="card-body">
+                    <h6 class="card-title text-muted mb-3">Quick Stats</h6>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Employee ID:</span>
+                        <strong th:text="'#' + ${user.id}">123</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2" th:if="${user.hireDate != null}">
+                        <span class="text-muted">Years at Company:</span>
+                        <strong th:text="${yearsAtCompany}">3.5 years</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Department:</span>
+                        <strong th:text="${user.department}">Development</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Personal Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="text-muted small">Full Name</label>
+                            <p class="mb-0 fw-semibold" th:text="${user.fullName}">John Michael Doe</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">Email</label>
+                            <p class="mb-0" th:text="${user.email}">john.doe@company.com</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">Phone</label>
+                            <p class="mb-0" th:text="${user.phoneNumber}">+1 (555) 123-4567</p>
+                        </div>
+                        <div class="col-md-6" th:if="${user.dateOfBirth != null}">
+                            <label class="text-muted small">Birthday</label>
+                            <p class="mb-0">
+                                <span th:text="${#temporals.format(user.dateOfBirth, 'MMMM dd, yyyy')}">March 15, 1990</span>
+                                <span th:if="${userAge != null}" th:text="'(' + ${userAge} + ' years old)'"></span>
+                            </p>
+                        </div>
+                        <div class="col-md-6" th:unless="${user.dateOfBirth != null}">
+                            <label class="text-muted small">Birthday</label>
+                            <p class="mb-0 text-muted">Not provided</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Work Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="text-muted small">Department</label>
+                            <p class="mb-0 fw-semibold" th:text="${user.department}">Development</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">Position</label>
+                            <p class="mb-0" th:text="${user.position != null ? user.position : 'Not specified'}">Senior Software Developer</p>
+                        </div>
+                        <div class="col-md-6" th:if="${user.hireDate != null}">
+                            <label class="text-muted small">Hire Date</label>
+                            <span th:text="${#temporals.format(user.hireDate, 'MMMM dd, yyyy')}">January 15, 2021</span>
+                        </div>
+                        <div class="col-md-6" th:unless="${user.hireDate != null}">
+                            <label class="text-muted small">Hire Date</label>
+                            <p class="mb-0 text-muted">Not recorded</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Account Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="text-muted small">Username</label>
+                            <p class="mb-0" th:text="${'@' + user.username}">@johndoe</p>
+                        </div>
+
+                        <div class="col-md-6" sec:authorize="hasRole('ADMIN')">
+                            <label class="text-muted small">Role</label>
+                            <p class="mb-0">
+                                <span th:if="${user.role == 'ROLE_ADMIN'}" class="badge bg-danger">Administrator</span>
+                                <span th:unless="${user.role == 'ROLE_ADMIN'}" class="badge bg-info">Regular User</span>
+                            </p>
+                        </div>
+
+                        <div class="col-md-6" th:if="${user.createdAt != null}">
+                            <label class="text-muted small">Account Created</label>
+                            <span th:text="${#temporals.format(user.createdAt, 'MMMM dd, yyyy')}">January 15, 2021</span>
+                        </div>
+                        <div class="col-md-6" th:if="${user.updatedAt != null}">
+                            <label class="text-muted small">Last Updated</label>
+                            <span th:text="${#temporals.format(user.updatedAt, 'MMMM dd, yyyy HH:mm')}">October 26, 2025 at 9:30 AM</span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">Account Status</label>
+                            <p class="mb-0">
+                                <span th:if="${user.active}" class="badge bg-success">Active</span>
+                                <span th:unless="${user.active}" class="badge bg-warning">Inactive</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
