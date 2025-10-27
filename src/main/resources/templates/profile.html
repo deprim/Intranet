@@ -20,7 +20,7 @@
                     <div class="profile-avatar-container mx-auto mb-3">
                         <th:block th:if="${user.avatarUrl != null and user.avatarUrl != ''}">
                             <!-- Display actual image if URL exists -->
-                            <img th:src="${user.avatarUrl}"
+                            <img th:src="@{${user.avatarUrl != null ? user.avatarUrl : '/images/default_avatar.png'}}"
                                  alt="Avatar"
                                  class="profile-avatar-large">
                         </th:block>

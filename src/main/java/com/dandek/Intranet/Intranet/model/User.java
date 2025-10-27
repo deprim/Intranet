@@ -71,7 +71,7 @@ public class User {
     @NotBlank(message = "Role is required")
     private String role;
 
-    @Transient
+    @Column(name = "avatarurl")
     private String avatarUrl;
 
 
@@ -105,7 +105,7 @@ public class User {
         this.updatedAt = updatedAt;
         this.role = role;
         this.department = department;
-        this.avatarUrl = "/images/default_avatar.png";
+        this.avatarUrl = avatarUrl;
     }
 
 

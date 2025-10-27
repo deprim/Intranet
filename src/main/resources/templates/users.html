@@ -10,12 +10,9 @@
         <h1 class="page-title mb-0">Employees</h1>
     </div>
 
-    <!-- Filters and Search -->
     <div class="card shadow-sm mb-4">
         <div class="card-body">
-            <!-- Обратите внимание: все параметры фильтрации, включая showInactive, должны быть переданы обратно -->
             <form th:action="@{/user}" method="get" class="row g-3">
-                <!-- Search -->
                 <div class="col-md-3">
                     <label for="search" class="form-label">Search</label>
                     <input type="text"
@@ -26,12 +23,10 @@
                            placeholder="Name, email, or username...">
                 </div>
 
-                <!-- Department Filter (Теперь динамический) -->
                 <div class="col-md-3">
                     <label for="department" class="form-label">Department</label>
                     <select class="form-select" id="department" name="department">
                         <option value="">All Departments</option>
-                        <!-- ДИНАМИЧЕСКИЕ ДЕПАРТАМЕНТЫ -->
                         <option th:each="deptName : ${allDepartments}"
                                 th:value="${deptName}"
                                 th:text="${deptName}"
@@ -39,7 +34,6 @@
                     </select>
                 </div>
 
-                <!-- Sort By (Уменьшен до col-md-2) -->
                 <div class="col-md-2">
                     <label for="sortBy" class="form-label">Sort By</label>
                     <select class="form-select" id="sortBy" name="sortBy">
@@ -48,9 +42,7 @@
                     </select>
                 </div>
 
-                <!-- ГАЛОЧКА "SHOW INACTIVE USERS" (col-md-2) -->
                 <div class="col-md-2">
-                    <!-- Пустая метка для выравнивания по высоте с другими метками (form-label) -->
                     <label class="form-label">&nbsp;</label>
                     <div class="form-check pt-1">
                         <input class="form-check-input"
@@ -65,7 +57,6 @@
                     </div>
                 </div>
 
-                <!-- Apply Button (col-md-2) -->
                 <div class="col-md-2 d-flex align-items-end">
                     <button type="submit" class="btn btn-outline-primary w-100">
                         Apply Filters
@@ -75,7 +66,6 @@
         </div>
     </div>
 
-    <!-- Statistics -->
     <div class="row g-3 mb-4">
         <div class="col-md-3">
             <div class="card shadow-sm text-center">
@@ -111,13 +101,11 @@
         </div>
     </div>
 
-    <!-- Empty State -->
     <div th:if="${#lists.isEmpty(users)}" class="alert alert-info">
         <h5 class="alert-heading">No employees found</h5>
         <p class="mb-0">Try adjusting your search or filter criteria.</p>
     </div>
 
-    <!-- Employees Table -->
     <div th:if="${!#lists.isEmpty(users)}" class="card shadow-sm">
         <div class="card-body">
             <div class="table-responsive">
@@ -136,10 +124,22 @@
                     <tr th:each="user : ${users}">
                         <td>
                             <div class="d-flex align-items-center">
-                                <div class="employee-avatar me-3"
-                                     th:text="${#strings.substring(user.fullName, 0, 1) + #strings.substring(#strings.substringAfter(user.fullName, ' '), 0, 1)}">
-                                    JD
-                                </div>
+
+                                <th:block th:if="${user.avatarUrl != null and user.avatarUrl != ''}">
+                                    <img th:src="${user.avatarUrl}" alt="Avatar" class="employee-avatar me-3">
+                                </th:block>
+                                <th:block th:unless="${user.avatarUrl != null and user.avatarUrl != ''}">
+                                    <div class="employee-avatar me-3"
+                                         th:with="initials=${user.fullName != null ?
+                                                      #strings.substring(user.fullName, 0, 1) +
+                                                      (#strings.contains(user.fullName, ' ') ?
+                                                          #strings.substring(user.fullName, #strings.indexOf(user.fullName, ' ') + 1, #strings.indexOf(user.fullName, ' ') + 2)
+                                                          : '')
+                                                      : ''}"
+                                         th:text="${initials}">
+                                        JD
+                                    </div>
+                                </th:block>
                                 <div>
                                     <div class="fw-semibold" th:text="${user.fullName}">John Doe</div>
                                     <small class="text-muted" th:text="'@' + ${user.username}">@johndoe</small>
@@ -156,12 +156,10 @@
                             <span th:unless="${user.isActive}" class="badge bg-warning">Inactive</span>
                         </td>
                         <td>
-                            <!-- Кнопка View доступна всем -->
                             <a th:href="@{/user/{id}(id=${user.id})}"
                                class="btn btn-sm btn-outline-primary me-1">
                                 View
                             </a>
-                            <!-- 1. Кнопка Edit ВИДНА ТОЛЬКО АДМИНАМ -->
                             <a th:href="@{/user/{id}/edit(id=${user.id})}"
                                class="btn btn-sm btn-outline-secondary"
                                sec:authorize="hasRole('ADMIN')">
@@ -173,10 +171,8 @@
                 </table>
             </div>
 
-            <!-- Pagination -->
             <nav th:if="${totalPages > 1}" aria-label="Page navigation" class="mt-4">
                 <ul class="pagination justify-content-center">
-                    <!-- Параметры showInactive добавлены в ссылки пагинации -->
                     <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
                         <a class="page-link"
                            th:href="@{/user(page=${currentPage - 1}, search=${search}, department=${department}, sortBy=${sortBy}, showInactive=${showInactive})}">&laquo;</a>

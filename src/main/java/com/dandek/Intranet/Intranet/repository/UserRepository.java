@@ -12,16 +12,18 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
 
-    public User findByUsername(String username);
+    public Optional<User> findByUsername(String username);
 
     public List<User> findByActiveIsTrue();
 
     public List<User> findByActiveIsFalse();
+
 
     @Query("SELECT u FROM User u WHERE " +
             "(:search IS NULL OR :search = '' OR " +

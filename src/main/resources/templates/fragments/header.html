@@ -5,80 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${pageTitle} ?: 'Corporate Portal'">Corporate Portal</title>
 
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Custom CSS -->
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
 <header th:fragment="header" class="site-header">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-        <div class="container-fluid">
-            <a class="navbar-brand d-flex align-items-center" th:href="@{/home}">
-                <img th:src="@{/images/logo.webp}" alt="Logo" class="logo-img me-2"
-                     onerror="this.style.display='none'">
-                <!-- <span class="brand-text">Walletto Intranet</span> -->
-            </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav" aria-controls="navbarNav"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <th:block th:with="isOooTest=${true}">
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/home}"
-                           th:classappend="${#strings.equals(activePage, 'home')} ? ' active' : ''">
-                            Home
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/news}"
-                           th:classappend="${#strings.equals(activePage, 'news')} ? ' active' : ''">
-                            News
-                        </a>
-                    </li>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" th:href="@{/home}">
+                    <img th:src="@{/images/logo.webp}" alt="Logo" class="logo-img me-2"
+                         onerror="this.style.display='none'">
+                </a>
 
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/user}"
-                           th:classappend="${#strings.equals(activePage, 'user')} ? ' active' : ''">
-                            Employees
-                        </a>
-                    </li>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav" aria-controls="navbarNav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                    <li class="nav-item" sec:authorize="hasRole('ADMIN')" th:href="@{/news/create}">
-                        <a class="nav-link " th:href="@{/news/create}"
-                           th:classappend="${#strings.equals(activePage, 'birthdays')} ? ' active' : ''">
-                            Create news
-                        </a>
-                    </li>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/home}"
+                               th:classappend="${#strings.equals(activePage, 'home')} ? ' active' : ''">
+                                Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/news}"
+                               th:classappend="${#strings.equals(activePage, 'news')} ? ' active' : ''">
+                                News
+                            </a>
+                        </li>
 
-                    <li class="nav-item" sec:authorize="hasRole('ADMIN')" th:href="@{/register}">
-                        <a class="nav-link" th:href="@{/register}">
-                            Register User
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/user}"
+                               th:classappend="${#strings.equals(activePage, 'user')} ? ' active' : ''">
+                                Employees
+                            </a>
+                        </li>
 
-                    <!-- Кнопка Мой профиль, если пользователь залогинен -->
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/profile}">
-                            My Profile
-                        </a>
-                    </li>
+                        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                            <a class="nav-link " th:href="@{/news/create}"
+                               th:classappend="${#strings.equals(activePage, 'birthdays')} ? ' active' : ''">
+                                Create news
+                            </a>
+                        </li>
 
-                </ul>
+                        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                            <a class="nav-link " th:href="@{#}"
+                               th:classappend="${#strings.equals(activePage, 'birthdays')} ? ' active' : ''">
+                                Create event
+                            </a>
+                        </li>
 
+                        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                            <a class="nav-link" th:href="@{/register}">
+                                Register User
+                            </a>
+                        </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/profile}">
+                                My Profile
+                            </a>
+                        </li>
+
+                        <li class="nav-item ms-lg-3">
+                            <form th:action="@{/profile/toggle-ooo}" method="post">
+                                <button type="submit"
+                                        class="btn btn-sm"
+                                        th:classappend="${isOooTest} ? 'btn-success' : 'btn-outline-secondary'">
+                                <span th:if="${isOooTest}">
+                                    🟢 OOO (Click to return)
+                                </span>
+                                    <span th:unless="${isOooTest}">
+                                    Set Out Of Office
+                                </span>
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+
+    </th:block>
 </header>
 </body>
 </html>

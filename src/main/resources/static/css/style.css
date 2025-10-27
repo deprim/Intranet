@@ -492,3 +492,47 @@ main {
 .news-item {
     animation: fadeIn 0.3s ease-out;
 }
+
+/* === Стили для списков/таблиц сотрудников (Employee List) === */
+
+/* === Стили для списков/таблиц сотрудников (Employee List) === */
+
+.employee-avatar {
+    /* Фиксированные размеры для лаконичности */
+    width: 40px;
+    height: 40px;
+
+    /* Делаем круглым */
+    border-radius: 50%;
+
+    /* Стили для инициалов (если нет аватара) */
+    /* Используем переменную для серого цвета: --secondary-grey */
+    background-color: var(--secondary-grey); /* <-- ИЗМЕНЕНО НА СЕРЫЙ */
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+
+    /* Центрирование инициалов */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Стили для изображения (если аватар есть) */
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+/* === Стили для бейджей департаментов (bg-primary-soft) === */
+
+.badge.bg-primary-soft {
+    /* Фоновый цвет: очень светлый серый (светлее, чем light-grey, но не белый) */
+    background-color: #e9ecef; /* Схож с цветом bootstrap .bg-light или --border-grey */
+
+    /* Цвет текста: Тёмно-серый, чтобы он хорошо читался */
+    color: var(--text-dark) !important; /* Используем ваш основной тёмный цвет текста */
+
+    /* Дополнительные стили */
+    padding: 0.4em 0.7em;
+    font-weight: 600;
+    border-radius: 0.5rem;
+}
