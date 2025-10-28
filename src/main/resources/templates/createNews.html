@@ -17,11 +17,7 @@
                 <div class="card-body p-4">
 
                     <!-- Форма создания новости -->
-                    <!--
-                         ВАЖНО: action и method должны быть настроены для вашего Spring-контроллера.
-                         Здесь используется '/admin/news' как пример.
-                    -->
-                    <form th:action="@{/admin/news}" method="post">
+                    <form th:action="@{/news/create}" method="post">
 
                         <!-- Заголовок новости -->
                         <div class="mb-3">
@@ -33,17 +29,6 @@
                                    placeholder="Enter the news title (max 255 chars)"
                                    maxlength="255"
                                    required>
-                        </div>
-
-                        <!-- Автор (опционально, можно убрать, если автор берется из сессии) -->
-                        <div class="mb-3">
-                            <label for="author" class="form-label fw-bold">Author (Optional)</label>
-                            <input type="text"
-                                   class="form-control"
-                                   id="author"
-                                   name="author"
-                                   placeholder="Enter author's name"
-                                   maxlength="100">
                         </div>
 
                         <!-- Содержание новости -->

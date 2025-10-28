@@ -6,6 +6,8 @@
     <title th:text="${pageTitle} ?: 'Corporate Portal'">Corporate Portal</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -14,90 +16,89 @@
 
 <body>
 <header th:fragment="header" class="site-header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/home}">
+                <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img me-2"
+                     onerror="this.style.display='none'">
+            </a>
 
-    <th:block th:with="isOooTest=${true}">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav" aria-controls="navbarNav"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-            <div class="container-fluid">
-                <a class="navbar-brand d-flex align-items-center" th:href="@{/home}">
-                    <img th:src="@{/images/logo.webp}" alt="Logo" class="logo-img me-2"
-                         onerror="this.style.display='none'">
-                </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/home}"
+                           th:classappend="${#strings.equals(activePage, 'home')} ? ' active' : ''">
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/news}"
+                           th:classappend="${#strings.equals(activePage, 'news')} ? ' active' : ''">
+                            News
+                        </a>
+                    </li>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarNav" aria-controls="navbarNav"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/user}"
+                           th:classappend="${#strings.equals(activePage, 'user')} ? ' active' : ''">
+                            Employees
+                        </a>
+                    </li>
 
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto align-items-lg-center">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/home}"
-                               th:classappend="${#strings.equals(activePage, 'home')} ? ' active' : ''">
-                                Home
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/news}"
-                               th:classappend="${#strings.equals(activePage, 'news')} ? ' active' : ''">
-                                News
-                            </a>
-                        </li>
+                    <!-- NEW: Events/Calendar Management Link -->
+                    <!-- Предполагаем, что этот пункт меню доступен только администраторам или HR -->
+                    <li class="nav-item" sec:authorize="hasAnyRole('ADMIN', 'HR')">
+                        <a class="nav-link" th:href="@{/event/create}"
+                           th:classappend="${#strings.equals(activePage, 'event')} ? ' active' : ''">
+                            Events
+                        </a>
+                    </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/user}"
-                               th:classappend="${#strings.equals(activePage, 'user')} ? ' active' : ''">
-                                Employees
-                            </a>
-                        </li>
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a class="nav-link " th:href="@{/news/create}"
+                           th:classappend="${#strings.equals(activePage, 'create-news')} ? ' active' : ''">
+                            Create news
+                        </a>
+                    </li>
 
-                        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                            <a class="nav-link " th:href="@{/news/create}"
-                               th:classappend="${#strings.equals(activePage, 'birthdays')} ? ' active' : ''">
-                                Create news
-                            </a>
-                        </li>
 
-                        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                            <a class="nav-link " th:href="@{#}"
-                               th:classappend="${#strings.equals(activePage, 'birthdays')} ? ' active' : ''">
-                                Create event
-                            </a>
-                        </li>
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a class="nav-link" th:href="@{/register}">
+                            Register User
+                        </a>
+                    </li>
 
-                        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                            <a class="nav-link" th:href="@{/register}">
-                                Register User
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/profile}">
+                            My Profile
+                        </a>
+                    </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/profile}">
-                                My Profile
-                            </a>
-                        </li>
-
-                        <li class="nav-item ms-lg-3">
-                            <form th:action="@{/profile/toggle-ooo}" method="post">
-                                <button type="submit"
-                                        class="btn btn-sm"
-                                        th:classappend="${isOooTest} ? 'btn-success' : 'btn-outline-secondary'">
-                                <span th:if="${isOooTest}">
-                                    🟢 OOO (Click to return)
-                                </span>
-                                    <span th:unless="${isOooTest}">
-                                    Set Out Of Office
-                                </span>
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
+                    <li class="nav-item ms-lg-3">
+                        <form th:action="@{/profile/toggle-ooo}" method="post">
+                            <button type="submit"
+                                    class="btn btn-sm"
+                                    th:classappend="${isOOO} ? 'btn-success' : 'btn-outline-secondary'">
+                            <span th:if="${isOOO}">
+                                🟢 OOO (Click to return)
+                            </span>
+                                <span th:unless="${isOOO}">
+                                Set Out Of Office
+                            </span>
+                            </button>
+                        </form>
+                    </li>
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-    </th:block>
 </header>
 </body>
 </html>

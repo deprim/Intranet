@@ -16,36 +16,30 @@ public class News {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @NotNull
     private Long id;
 
-    @Column(name = "title")
     @NotBlank
+    @Column(name = "title")
     private String title;
 
-    @Column(name = "content")
     @NotBlank
+    @Column(name = "content")
     private String content;
 
     @Column(name = "preview")
-    @NotBlank
     private String preview;
-
 
     @ManyToOne
     @JoinColumn(name = "author_id")
     private User author;
 
     @Column(name = "published_date")
-    @NotNull
     private LocalDate publishedDate;
 
     @Column(name = "created_at")
-    @NotNull
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    @NotNull
     private LocalDateTime updatedAt;
 
 
@@ -68,35 +62,35 @@ public class News {
         this.updatedAt = updatedAt;
     }
 
-    public @NotNull Long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(@NotNull Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public @NotBlank String getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(@NotBlank String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public @NotBlank String getContent() {
+    public String getContent() {
         return content;
     }
 
-    public void setContent(@NotBlank String content) {
+    public void setContent(String content) {
         this.content = content;
     }
 
-    public @NotBlank String getPreview() {
+    public String getPreview() {
         return preview;
     }
 
-    public void setPreview(@NotBlank String preview) {
+    public void setPreview(String preview) {
         this.preview = preview;
     }
 
@@ -108,27 +102,27 @@ public class News {
         this.author = author;
     }
 
-    public @NotNull LocalDate getPublishedDate() {
+    public LocalDate getPublishedDate() {
         return publishedDate;
     }
 
-    public void setPublishedDate(@NotNull LocalDate publishedDate) {
+    public void setPublishedDate(LocalDate publishedDate) {
         this.publishedDate = publishedDate;
     }
 
-    public @NotNull LocalDateTime getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(@NotNull LocalDateTime createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public @NotNull LocalDateTime getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(@NotNull LocalDateTime updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <link rel="stylesheet" th:href="@{/css/style.css}">
-
 </head>
 <body>
 <div th:replace="~{fragments/header :: header}"></div>
@@ -18,39 +17,55 @@
     <div class="container mt-5">
         <div class="row">
 
+
             <div class="col-lg-2 d-none d-lg-block">
 
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-primary text-white fw-bold">Quick Links</div>
                     <div class="list-group list-group-flush">
-                        <a href="/portal/hr" class="list-group-item list-group-item-action d-flex align-items-center">
-                            <i class="fas fa-users fa-fw me-2"></i> HR Portal
+                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <i class="fas fa-tasks fa-fw me-2"></i> Redmine
                         </a>
-                        <a href="/portal/it" class="list-group-item list-group-item-action d-flex align-items-center">
-                            <i class="fas fa-tools fa-fw me-2"></i> IT Helpdesk
+                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <i class="fas fa-headset fa-fw me-2"></i> HelpDesk
                         </a>
-                        <a href="/portal/knowledge" class="list-group-item list-group-item-action d-flex align-items-center">
-                            <i class="fas fa-book fa-fw me-2"></i> Knowledge Base
+                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <i class="fas fa-book-open fa-fw me-2"></i> Wiki
                         </a>
-                        <a href="/portal/expenses" class="list-group-item list-group-item-action d-flex align-items-center">
-                            <i class="fas fa-file-invoice-dollar fa-fw me-2"></i> Expense Reporting
+                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <i class="fas fa-handshake fa-fw me-2"></i> CRM
                         </a>
-                        <a href="/portal/calendar" class="list-group-item list-group-item-action d-flex align-items-center">
-                            <i class="fas fa-calendar-alt fa-fw me-2"></i> Company Calendar
+                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <i class="fas fa-box-open fa-fw me-2"></i> Box
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <i class="fas fa-coins fa-fw me-2"></i> Coin
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <i class="fas fa-th-large fa-fw me-2"></i> Heimdall
                         </a>
                     </div>
                 </div>
 
+                <!-- BEGIN NAVIGABLE CALENDAR CARD -->
                 <div class="card shadow-sm mb-4">
-                    <div class="card-header bg-secondary text-white text-center fw-bold" id="calendar-header">
-                        Loading Calendar...
+                    <div class="card-header bg-secondary text-white text-center fw-bold d-flex justify-content-between align-items-center p-2">
+                        <button id="prevMonth" class="btn btn-sm text-white" style="background: none; border: none;">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <span id="calendar-header">Loading Calendar...</span>
+                        <button id="nextMonth" class="btn btn-sm text-white" style="background: none; border: none;">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
                     </div>
                     <div class="card-body p-2">
                         <div class="calendar-grid" id="calendar-grid">
+                            <!-- Calendar days rendered here -->
                         </div>
                         <small class="text-muted d-block text-center mt-2">Click to view all company events</small>
                     </div>
                 </div>
+                <!-- END NAVIGABLE CALENDAR CARD -->
 
             </div>
 
@@ -68,7 +83,7 @@
             </div>
 
             <div class="col-lg-4">
-
+                <!-- Birthday Cards (Unchanged) -->
                 <div class="card shadow-sm mb-4 birthday-card" style="border: none;">
                     <div class="card-header bg-primary text-white">
                         Birthdays in <span th:text="${month}">Month</span>
@@ -97,6 +112,23 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="card shadow-sm mb-4 birthday-card" style="border: none;">
+                    <div class="card-header bg-primary text-white">Out Of Office Today</div>
+
+                    <div th:if="${#lists.isEmpty(oooUsers)}" class="card-body text-center p-3">
+                        <i class="fas fa-suitcase text-muted birthday-icon-medium mb-2"></i>
+                        <p class="text-muted mb-0">No one is Out Of Office!</p>
+                    </div>
+
+                    <div th:unless="${#lists.isEmpty(oooUsers)}" class="card-body d-flex flex-wrap gap-2 p-2">
+                        <div th:each="user : ${oooUsers}"
+                             class="p-2 bg-light border rounded shadow-sm"
+                             th:text="${user.fullName}">
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
         </div>
@@ -104,49 +136,71 @@
 </main>
 <div th:replace="~{fragments/footer :: footer}"></div>
 
-<script>
-    // =========================================================================
-    // ЭТОТ БЛОК НУЖНО ЗАМЕНИТЬ НА РЕАЛЬНУЮ ИНЖЕКЦИЮ ДАННЫХ ИЗ THYMELEAF/SPRING
-    // Пример: const eventsJson = /*[[${eventsJson}]]*/ '[]';
-    // JSON должен содержать объекты с полями "date" (YYYY-MM-DD) и "title".
-    const eventsJson = '[{"date": "2025-10-29", "title": "Team Meeting"}, {"date": "2025-11-05", "title": "Company Holiday"}, {"date": "2025-10-17", "title": "Training"}]';
-    // =========================================================================
+<script th:inline="javascript">
 
-    document.addEventListener('DOMContentLoaded', (event) => {
-        // --- Calendar Logic (kept for completeness) ---
+    const eventsJson = /*[[${eventsJson}]]*/ '[]';
+
+    // Global variable to track the currently displayed date (default: today)
+    let currentDate = new Date();
+    // Use system's date for comparison
+    const today = new Date();
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Elements for calendar interaction
+        const prevMonthBtn = document.getElementById('prevMonth');
+        const nextMonthBtn = document.getElementById('nextMonth');
+
+        prevMonthBtn.addEventListener('click', () => {
+            // Subtract one month
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        });
+
+        nextMonthBtn.addEventListener('click', () => {
+            // Add one month
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        });
+
+        // --- Calendar Logic (UPDATED) ---
 
         function renderCalendar() {
-            const date = new Date();
-            const year = date.getFullYear();
-            const month = date.getMonth(); // 0-11
-            const today = date.getDate();
+            // Use currentDate state instead of creating a new Date()
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth(); // 0-11
+            const currentDayOfMonth = today.getDate(); // Use system date for highlighting 'today'
 
-            let events = {};
+            let parsedEvents = [];
             try {
-                const allEvents = JSON.parse(eventsJson);
-                const currentMonthKey = `${year}-${String(month + 1).padStart(2, '0')}`;
-
-                allEvents
-                    .filter(e => e.date.startsWith(currentMonthKey))
-                    .forEach(event => {
-                        const eventDate = new Date(event.date);
-                        if (eventDate.getFullYear() === year && eventDate.getMonth() === month) {
-                            const day = eventDate.getDate();
-                            events[day] = event;
-                        }
-                    });
-
+                parsedEvents = JSON.parse(eventsJson);
             } catch (e) {
-                console.error("Failed to parse events JSON. Check Thymeleaf data injection:", e);
+                console.error("Failed to parse events JSON:", e);
+                return;
             }
 
+            let eventsForMonth = {};
+            const currentMonthKey = `${year}-${String(month + 1).padStart(2, '0')}`;
+
+            // 1. Filter events for the currently displayed month
+            parsedEvents
+                .filter(e => e.date && e.date.startsWith(currentMonthKey))
+                .forEach(event => {
+                    const eventDate = new Date(event.date);
+                    // Double check to handle timezone/daylight savings issues
+                    if (eventDate.getFullYear() === year && eventDate.getMonth() === month) {
+                        const day = eventDate.getDate();
+                        eventsForMonth[day] = event;
+                    }
+                });
+
+
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            // Day headers are shortened in the HTML, so we use single letters for consistency
             const dayHeaders = ["S", "M", "T", "W", "T", "F", "S"];
 
             const headerElement = document.getElementById('calendar-header');
             const gridElement = document.getElementById('calendar-grid');
 
+            // 2. Update the header title
             headerElement.textContent = `${monthNames[month]} ${year}`;
 
             let htmlContent = '';
@@ -154,18 +208,25 @@
                 htmlContent += `<div class="day-header">${day}</div>`;
             });
 
+            // Get the first day of the month (0=Sunday, 6=Saturday)
             const firstDayOfMonth = new Date(year, month, 1).getDay();
+            // Get the number of days in the current month
             const daysInMonth = new Date(year, month + 1, 0).getDate();
 
+            // Add empty cells for padding before the 1st day
             for (let i = 0; i < firstDayOfMonth; i++) {
                 htmlContent += `<div class="day-cell"></div>`;
             }
 
+            // Render days
             for (let day = 1; day <= daysInMonth; day++) {
                 let dayClass = 'day-cell';
                 let eventTitle = '';
-                const isCurrentDay = (day === today);
-                const hasEvent = events[day];
+
+                // Check if the current loop day is TODAY's date (only if we are viewing the current month/year)
+                const isCurrentDay = (day === currentDayOfMonth && year === today.getFullYear() && month === today.getMonth());
+
+                const hasEvent = eventsForMonth[day];
 
                 if (hasEvent) {
                     dayClass += ' event-day';
@@ -182,44 +243,34 @@
             gridElement.innerHTML = htmlContent;
         }
 
-        // --- News Truncation Logic (UPDATED) ---
-
-        // Truncates text and adds a 'Read More' button linked to the news ID
+        // --- News Truncation Logic (Unchanged) ---
         function setupNewsTruncation(limit = 150) {
             const newsElements = document.querySelectorAll('.news-content-text');
 
             newsElements.forEach(p => {
                 const fullText = p.textContent;
-                // Trim content injected by Thymeleaf
                 p.textContent = fullText.trim();
-
-                // Get news ID from the data attribute (which must be set by Thymeleaf)
                 const newsId = p.getAttribute('data-news-id');
 
-                // Check if truncation is necessary AND if we have a news ID for navigation
                 if (fullText.length > limit && newsId) {
-                    // Set the initial content to truncated preview
                     p.textContent = fullText.substring(0, limit).trim() + '...';
 
-                    // Create Read More button
                     const btn = document.createElement('button');
                     btn.className = 'btn btn-sm btn-outline-primary read-more-btn mt-2';
-                    btn.textContent = 'Read More'; // <-- Текст кнопки на английском
+                    btn.textContent = 'Read More';
 
-                    // Append button right after the paragraph
                     p.parentNode.insertBefore(btn, p.nextSibling);
 
-                    // Add click listener for navigation
                     btn.addEventListener('click', function() {
-                        // Navigate to the specific news endpoint using the ID
                         window.location.href = `/news/${newsId}`;
                     });
                 }
             });
         }
 
+        // Initial calls
         renderCalendar();
-        setupNewsTruncation(150); // Устанавливаем лимит 150 символов
+        setupNewsTruncation(150);
     });
 </script>
 </body>

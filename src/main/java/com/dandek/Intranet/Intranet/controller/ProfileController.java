@@ -110,12 +110,18 @@ public class ProfileController {
 
         return "redirect:/profile";
 
+    }
 
+    @PostMapping("/toggle-ooo")
+    public String toogleOoo(Principal principal,
+                            Model model) {
 
+        User user = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new RuntimeException("No user found with this username"));
 
+        userService.toogleOOO(user);
 
-
-
+        return "redirect:/home";
 
     }
 

@@ -24,6 +24,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     public List<User> findByActiveIsFalse();
 
+    public List<User> findByOutOfOfficeIsTrue();
+
 
     @Query("SELECT u FROM User u WHERE " +
             "(:search IS NULL OR :search = '' OR " +

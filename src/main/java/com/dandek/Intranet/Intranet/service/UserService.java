@@ -28,8 +28,7 @@ public class UserService {
 
     public Page<User> findAllPagination(int page, int itemsPerPage) {
         Pageable pageable = PageRequest.of(page, itemsPerPage);
-        Page<User> users = userRepository.findAll(pageable);
-        return users;
+        return userRepository.findAll(pageable);
     }
 
     public Page<User> findFilteredAndPaginated(int page, int itemsPerPage, String search, String department,
@@ -60,8 +59,7 @@ public class UserService {
 
     public Page<User> findAllPaginationAndSortedDescending(int page, int itemsPerPage, String sortBy) {
         Pageable pageable = PageRequest.of(page, itemsPerPage, Sort.Direction.DESC, sortBy);
-        Page<User> users = userRepository.findAll(pageable);
-        return users;
+        return userRepository.findAll(pageable);
     }
 
     public List<User> findAll() {
@@ -93,9 +91,8 @@ public class UserService {
 
         Integer userYearsAtCompany = user.getHireDate().getYear();
         Integer yearNow = LocalDate.now().getYear();
-        Integer yearsInCompany = yearNow - userYearsAtCompany;
 
-        return yearsInCompany;
+        return yearNow - userYearsAtCompany;
 
     }
 
@@ -141,6 +138,10 @@ public class UserService {
             departments.add(user.getDepartment());
         }
         return departments;
+    }
+
+    public List<User> getOutOfOfficeUsers(){
+        return userRepository.findByOutOfOfficeIsTrue();
     }
 
     @Transactional
@@ -190,6 +191,18 @@ public class UserService {
     @Transactional
     public void save(User user) {
         userRepository.save(user);
+    }
+
+    @Transactional
+    public void toogleOOO(User user) {
+
+        if (user.isOutOfOffice()) {
+            user.setOutOfOffice(false);
+        } else  {
+            user.setOutOfOffice(true);
+        }
+        userRepository.save(user);
+
     }
 
 

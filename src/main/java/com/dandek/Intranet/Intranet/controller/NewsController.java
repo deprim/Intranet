@@ -1,23 +1,30 @@
 package com.dandek.Intranet.Intranet.controller;
 
 import com.dandek.Intranet.Intranet.model.News;
+import com.dandek.Intranet.Intranet.model.User;
 import com.dandek.Intranet.Intranet.service.NewsService;
+import com.dandek.Intranet.Intranet.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/news")
 public class NewsController {
 
     private final NewsService newsService;
+    private final UserService userService;
 
     @Autowired
-    public NewsController(NewsService newsService) {
+    public NewsController(NewsService newsService,
+                          UserService userService) {
         this.newsService = newsService;
+        this.userService = userService;
     }
 
     @GetMapping()
@@ -40,6 +47,21 @@ public class NewsController {
     public String create(Model model) {
         model.addAttribute("news", new News());
         return "createNews";
+    }
+
+    @PostMapping("/create")
+    public String createNews(@ModelAttribute News news,
+                             Principal principal) {
+
+
+
+        User user = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new RuntimeException("Username not found"));
+
+        newsService.createNews(news, user);
+
+        return "redirect:/news";
+
     }
 
 

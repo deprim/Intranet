@@ -74,6 +74,9 @@ public class User {
     @Column(name = "avatarurl")
     private String avatarUrl;
 
+    @Column(name = "is_ooo")
+    private boolean outOfOffice;
+
 
     public User() {
     }
@@ -91,7 +94,8 @@ public class User {
                 LocalDateTime updatedAt,
                 String role,
                 String department,
-                String avatarUrl) {
+                String avatarUrl,
+                boolean outOfOffice) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -106,6 +110,7 @@ public class User {
         this.role = role;
         this.department = department;
         this.avatarUrl = avatarUrl;
+        this.outOfOffice = outOfOffice;
     }
 
 
@@ -227,6 +232,14 @@ public class User {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public boolean isOutOfOffice() {
+        return outOfOffice;
+    }
+
+    public void setOutOfOffice(boolean outOfOffice) {
+        this.outOfOffice = outOfOffice;
     }
 
 
