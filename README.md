@@ -62,3 +62,68 @@ create table users
 ```sql
 TRUNCATE TABLE news, events, users, department RESTART IDENTITY CASCADE;
 ```
+
+```sql
+-- === Table: department ===
+INSERT INTO department (title)
+VALUES 
+    ('Development Department'),
+    ('Marketing Department'),
+    ('Sales Department'),
+    ('Human Resources Department');
+
+-- === Table: users ===
+INSERT INTO users (
+    username, password, email, full_name, birthday, phone, position, hire_date,
+    is_active, created_at, updated_at, role, avatarurl, is_ooo, department_id
+) VALUES 
+    -- Administrator
+    ('admin', '$2a$12$NioFfIKHhyFF5aMLoaIaMeUCD6wn44LRU9c8qf2b2OrGnP6T.l7Xm', 
+     'admin@company.com', 'System Administrator', '1985-01-10', '+15550000000', 
+     'System Administrator', '2015-06-01', true, NOW(), NOW(), 
+     'ROLE_ADMIN', 'https://example.com/avatars/admin.png', false, 1),
+
+    -- Regular users
+    ('ivan.petrov', 'userpass123', 'ivan.petrov@company.com', 'Ivan Petrov', '1990-03-22', '+15551112233',
+     'Software Developer', '2020-05-10', true, NOW(), NOW(), 'ROLE_USER', 'https://example.com/avatars/ivan.png', false, 1),
+
+    ('anna.smirnova', 'userpass123', 'anna.smirnova@company.com', 'Anna Smirnova', '1992-07-14', '+15552223344',
+     'Marketing Specialist', '2019-02-18', true, NOW(), NOW(), 'ROLE_USER', 'https://example.com/avatars/anna.png', false, 2),
+
+    ('pavel.kuznetsov', 'userpass123', 'pavel.kuznetsov@company.com', 'Pavel Kuznetsov', '1988-11-09', '+15553334455',
+     'Sales Manager', '2017-09-25', true, NOW(), NOW(), 'ROLE_USER', 'https://example.com/avatars/pavel.png', false, 3),
+
+    ('elena.orlova', 'userpass123', 'elena.orlova@company.com', 'Elena Orlova', '1995-04-02', '+15554445566',
+     'HR Specialist', '2021-01-11', true, NOW(), NOW(), 'ROLE_USER', 'https://example.com/avatars/elena.png', false, 4);
+
+-- === Table: news ===
+INSERT INTO news (title, content, preview, author_id, published_date, created_at, updated_at)
+VALUES
+    ('New Project Launch', 
+     'We are excited to announce the launch of our new corporate portal.', 
+     'The new portal will improve communication across all departments.', 
+     1, NOW(), NOW(), NOW()),
+
+    ('Corporate Policy Update', 
+     'Starting November 1, the new version of the corporate security policy takes effect.', 
+     'Please review the updated policy and ensure compliance.', 
+     2, NOW(), NOW(), NOW()),
+
+    ('Team Building Event in the Countryside', 
+     'Last weekend, our employees participated in team-building activities and outdoor challenges.', 
+     'A great opportunity to strengthen our team spirit!', 
+     4, NOW(), NOW(), NOW()),
+
+    ('New HR Team Member', 
+     'We are happy to welcome Elena Orlova to our HR department as a new HR Specialist.', 
+     'Welcome aboard, Elena!', 
+     5, NOW(), NOW(), NOW());
+
+-- === Table: events ===
+INSERT INTO events (date, title)
+VALUES
+    ('2025-11-05', 'Open House Day'),
+    ('2025-12-20', 'New Year Corporate Party'),
+    ('2026-01-15', 'New Product Presentation'),
+    ('2025-11-12', 'Cybersecurity Training Session');
+```
