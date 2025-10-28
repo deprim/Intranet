@@ -27,18 +27,18 @@ public interface UserRepository extends JpaRepository<User, Long> {
     public List<User> findByOutOfOfficeIsTrue();
 
 
+
     @Query("SELECT u FROM User u WHERE " +
             "(:search IS NULL OR :search = '' OR " +
             "LOWER(u.fullName) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
             "LOWER(u.email) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
             "LOWER(u.username) LIKE LOWER(CONCAT('%', :search, '%'))) AND " +
-            "(:department IS NULL OR :department = '' OR u.department = :department) AND " +
-            // НОВАЯ ЛОГИКА: Если showInactive=TRUE, то u.active неважно.
-            // Если showInactive=FALSE, то должно выполняться u.active=TRUE.
+            // 🚀 КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: Используем u.department.id для сравнения с Integer ID
+            "(:departmentId IS NULL OR u.department.id = :departmentId) AND " +
             "(:showInactive = TRUE OR u.active = TRUE)")
     Page<User> findFilteredUsers(@Param("search") String search,
-                                 @Param("department") String department,
-                                 @Param("showInactive") boolean showInactive, // <--- НОВЫЙ ПАРАМЕТР
+                                 @Param("departmentId") Integer departmentId, // ⬅️ ПАРАМЕТР Integer
+                                 @Param("showInactive") boolean showInactive,
                                  Pageable pageable);
 
 }

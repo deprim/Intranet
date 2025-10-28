@@ -1,6 +1,8 @@
 package com.dandek.Intranet.Intranet.controller;
 
+import com.dandek.Intranet.Intranet.model.Department;
 import com.dandek.Intranet.Intranet.model.User;
+import com.dandek.Intranet.Intranet.service.DepartmentService;
 import com.dandek.Intranet.Intranet.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +21,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RegisterController {
 
     private final UserService userService;
+    private final DepartmentService departmentService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public RegisterController(UserService userService,
+                              DepartmentService departmentService,
                               PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.departmentService = departmentService;
         this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping()
     public String showRegisterPage(Model model) {
         model.addAttribute("userForm", new User());
+        model.addAttribute("allDepartments", departmentService.findAll());
         return "register";
     }
 

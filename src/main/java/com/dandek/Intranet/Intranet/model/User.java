@@ -36,10 +36,10 @@ public class User {
     @Size(max = 100, message = "Full name must be less than 100 characters")
     private String fullName;
 
-    @Column(name = "department")
-    @NotBlank(message = "Department is required")
-    @Size(max = 100, message = "Department must be less than 100 characters")
-    private String department;
+
+    @JoinColumn(name = "department_id")
+    @ManyToOne
+    private Department department;
 
     @Column(name = "birthday")
     @NotNull(message = "Date of birth is required")
@@ -93,7 +93,7 @@ public class User {
                 LocalDateTime createdAt,
                 LocalDateTime updatedAt,
                 String role,
-                String department,
+                Department department,
                 String avatarUrl,
                 boolean outOfOffice) {
         this.username = username;
@@ -154,11 +154,11 @@ public class User {
         this.fullName = fullName;
     }
 
-    public @NotBlank(message = "Department is required") @Size(max = 100, message = "Department must be less than 100 characters") String getDepartment() {
+    public Department getDepartment() {
         return department;
     }
 
-    public void setDepartment(@NotBlank(message = "Department is required") @Size(max = 100, message = "Department must be less than 100 characters") String department) {
+    public void setDepartment(Department department) {
         this.department = department;
     }
 

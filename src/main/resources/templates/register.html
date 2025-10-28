@@ -14,13 +14,15 @@
                 <div class="card-body">
                     <!-- Success Message -->
                     <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>Success!</strong> <span th:text="${successMessage}">Employee registered successfully</span>
+                        <strong>Success!</strong>
+                        <span th:text="${successMessage}">Employee registered successfully</span>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
 
                     <!-- Error Message -->
                     <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>Error!</strong> <span th:text="${errorMessage}">Registration failed</span>
+                        <strong>Error!</strong>
+                        <span th:text="${errorMessage}">Registration failed</span>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
 
@@ -34,12 +36,8 @@
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label for="fullName" class="form-label">Full Name <span class="text-danger">*</span></label>
-                                    <input type="text"
-                                           class="form-control"
-                                           id="fullName"
-                                           th:field="*{fullName}"
-                                           required
-                                           placeholder="John Doe">
+                                    <input type="text" class="form-control" id="fullName"
+                                           th:field="*{fullName}" required placeholder="John Doe">
                                     <div class="invalid-feedback" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">
                                         Full name is required
                                     </div>
@@ -47,12 +45,8 @@
 
                                 <div class="col-md-6">
                                     <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                                    <input type="email"
-                                           class="form-control"
-                                           id="email"
-                                           th:field="*{email}"
-                                           required
-                                           placeholder="john.doe@company.com">
+                                    <input type="email" class="form-control" id="email"
+                                           th:field="*{email}" required placeholder="john.doe@company.com">
                                     <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
                                         Valid email is required
                                     </div>
@@ -60,19 +54,13 @@
 
                                 <div class="col-md-6">
                                     <label for="phone" class="form-label">Phone</label>
-                                    <input type="tel"
-                                           class="form-control"
-                                           id="phone"
-                                           th:field="*{phoneNumber}"
-                                           placeholder="+1234567890">
+                                    <input type="tel" class="form-control" id="phone"
+                                           th:field="*{phoneNumber}" placeholder="+1234567890">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="birthday" class="form-label">Birthday</label>
-                                    <input type="date"
-                                           class="form-control"
-                                           id="birthday"
-                                           th:field="*{dateOfBirth}">
+                                    <input type="date" class="form-control" id="birthday" th:field="*{dateOfBirth}">
                                 </div>
                             </div>
                         </div>
@@ -84,12 +72,8 @@
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
-                                    <input type="text"
-                                           class="form-control"
-                                           id="username"
-                                           th:field="*{username}"
-                                           required
-                                           placeholder="johndoe">
+                                    <input type="text" class="form-control" id="username"
+                                           th:field="*{username}" required placeholder="johndoe">
                                     <small class="form-text text-muted">Used for login. Must be unique.</small>
                                     <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
                                         Username is required
@@ -98,12 +82,8 @@
 
                                 <div class="col-md-6">
                                     <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
-                                    <input type="password"
-                                           class="form-control"
-                                           id="password"
-                                           th:field="*{password}"
-                                           required
-                                           placeholder="Enter password">
+                                    <input type="password" class="form-control" id="password"
+                                           th:field="*{password}" required placeholder="Enter password">
                                     <small class="form-text text-muted">Minimum 6 characters.</small>
                                     <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
                                         Password is required
@@ -119,20 +99,14 @@
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label for="department" class="form-label">Department <span class="text-danger">*</span></label>
-                                    <select class="form-select"
-                                            id="department"
-                                            th:field="*{department}"
-                                            required>
+                                    <select class="form-select" id="department" th:field="*{department}" required>
                                         <option value="">Select Department</option>
-                                        <option value="Development">Development</option>
-                                        <option value="Marketing">Marketing</option>
-                                        <option value="Sales">Sales</option>
-                                        <option value="HR">Human Resources</option>
-                                        <option value="Finance">Finance</option>
-                                        <option value="Operations">Operations</option>
-                                        <option value="Support">Support</option>
-                                        <option value="Management">Management</option>
+                                        <option th:each="dept : ${allDepartments}"
+                                                th:value="${dept.id}"
+                                                th:text="${dept.title}">
+                                        </option>
                                     </select>
+
                                     <div class="invalid-feedback" th:if="${#fields.hasErrors('department')}" th:errors="*{department}">
                                         Department is required
                                     </div>
@@ -140,27 +114,18 @@
 
                                 <div class="col-md-6">
                                     <label for="position" class="form-label">Position</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           id="position"
-                                           th:field="*{position}"
-                                           placeholder="Software Engineer">
+                                    <input type="text" class="form-control" id="position"
+                                           th:field="*{position}" placeholder="Software Engineer">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="hireDate" class="form-label">Hire Date</label>
-                                    <input type="date"
-                                           class="form-control"
-                                           id="hireDate"
-                                           th:field="*{hireDate}">
+                                    <input type="date" class="form-control" id="hireDate" th:field="*{hireDate}">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="role" class="form-label">Role <span class="text-danger">*</span></label>
-                                    <select class="form-select"
-                                            id="role"
-                                            th:field="*{role}"
-                                            required>
+                                    <select class="form-select" id="role" th:field="*{role}" required>
                                         <option value="">Select Role</option>
                                         <option value="ROLE_USER">Regular User</option>
                                         <option value="ROLE_ADMIN">Administrator</option>
@@ -170,29 +135,10 @@
                             </div>
                         </div>
 
-<!--                        &lt;!&ndash; Account Status &ndash;&gt;-->
-<!--                        <div class="mb-4">-->
-<!--                            <div class="form-check">-->
-<!--                                <input class="form-check-input"-->
-<!--                                       type="checkbox"-->
-<!--                                       id="isActive"-->
-<!--                                       th:field="*{isActive}"-->
-<!--                                       checked>-->
-<!--                                <label class="form-check-label" for="isActive">-->
-<!--                                    Account is active-->
-<!--                                </label>-->
-<!--                                <small class="form-text text-muted d-block">Inactive accounts cannot log in.</small>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
                         <!-- Form Actions -->
                         <div class="d-flex justify-content-between align-items-center pt-3 border-top">
-                            <a th:href="@{/admin/users}" class="btn btn-outline-secondary">
-                                Cancel
-                            </a>
-                            <button type="submit" class="btn btn-primary">
-                                Register Employee
-                            </button>
+                            <a th:href="@{/admin/users}" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Register Employee</button>
                         </div>
                     </form>
                 </div>

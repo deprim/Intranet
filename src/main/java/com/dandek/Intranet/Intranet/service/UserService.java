@@ -31,13 +31,15 @@ public class UserService {
         return userRepository.findAll(pageable);
     }
 
-    public Page<User> findFilteredAndPaginated(int page, int itemsPerPage, String search, String department,
-                                               String sortBy, boolean showInactive) {
 
+    public Page<User> findFilteredAndPaginated(int page, int itemsPerPage, String search, Integer departmentId, // ⬅️ ТИП ИЗМЕНЕН НА Integer
+                                               String sortBy, boolean showInactive) {
 
         Sort sort = getSort(sortBy);
         Pageable pageable = PageRequest.of(page, itemsPerPage, sort);
-        return userRepository.findFilteredUsers(search, department, showInactive, pageable);
+
+        // Передаем departmentId
+        return userRepository.findFilteredUsers(search, departmentId, showInactive, pageable);
     }
 
 
@@ -118,27 +120,28 @@ public class UserService {
                 .count();
     }
 
-    public Integer departmentCount(){
-        List<User> users = userRepository.findAll();
-
-        Set<String> departments = new HashSet<>();
-
-        for (User user : users) {
-            departments.add(user.getDepartment());
-        }
-
-        return departments.size();
-
-    }
-
-    public Set<String> getDepartments(){
-        Set<String> departments = new HashSet<>();
-        List<User> users = userRepository.findAll();
-        for (User user : users) {
-            departments.add(user.getDepartment());
-        }
-        return departments;
-    }
+//    public Integer departmentCount(){
+//        List<User> users = userRepository.findAll();
+//
+//        Set<String> departments = new HashSet<>();
+//
+//        for (User user : users) {
+//            departments.add(user.getDepartment().getTitle());
+//        }
+//
+//        return departments.size();
+//
+//    }
+//
+//    public Set<String> getDepartments(){
+//        // TODO change logic it should parse all Departments objects in DB table not users
+//        Set<String> departments = new HashSet<>();
+//        List<User> users = userRepository.findAll();
+//        for (User user : users) {
+//            departments.add(user.getDepartment().getTitle());
+//        }
+//        return departments;
+//    }
 
     public List<User> getOutOfOfficeUsers(){
         return userRepository.findByOutOfOfficeIsTrue();

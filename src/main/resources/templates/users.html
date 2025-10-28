@@ -12,7 +12,7 @@
 
     <div class="card shadow-sm mb-4">
         <div class="card-body">
-            <form th:action="@{/user}" method="get" class="row g-3">
+            <form th:action="@{/users}" method="get" class="row g-3">
                 <div class="col-md-3">
                     <label for="search" class="form-label">Search</label>
                     <input type="text"
@@ -24,13 +24,13 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label for="department" class="form-label">Department</label>
-                    <select class="form-select" id="department" name="department">
+                    <label for="departmentId" class="form-label">Department</label>
+                    <select class="form-select" id="departmentId" name="departmentId">
                         <option value="">All Departments</option>
-                        <option th:each="deptName : ${allDepartments}"
-                                th:value="${deptName}"
-                                th:text="${deptName}"
-                                th:selected="${department == deptName}">Development</option>
+
+                        <option th:each="dept : ${allDepartments}"
+                                th:value="${dept.id}"                    th:text="${dept.title}"                 th:selected="${selectedDepartmentId != null and dept.id == selectedDepartmentId}">
+                        </option>
                     </select>
                 </div>
 
@@ -147,9 +147,12 @@
                             </div>
                         </td>
                         <td th:text="${user.email}">john.doe@company.com</td>
+
                         <td>
-                            <span class="badge bg-primary-soft" th:text="${user.department}">Development</span>
+                            <span class="badge bg-primary-soft"
+                                  th:text="${user.department != null ? user.department.title : '-'}">Development</span>
                         </td>
+
                         <td th:text="${user.position ?: '-'}">Senior Developer</td>
                         <td>
                             <span th:if="${user.isActive}" class="badge bg-success">Active</span>
@@ -175,20 +178,20 @@
                 <ul class="pagination justify-content-center">
                     <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
                         <a class="page-link"
-                           th:href="@{/user(page=${currentPage - 1}, search=${search}, department=${department}, sortBy=${sortBy}, showInactive=${showInactive})}">&laquo;</a>
+                           th:href="@{/users(page=${currentPage - 1}, search=${search}, departmentId=${selectedDepartmentId}, sortBy=${sortBy}, showInactive=${showInactive})}">&laquo;</a>
                     </li>
 
                     <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                         class="page-item"
                         th:classappend="${i == currentPage} ? 'active'">
                         <a class="page-link"
-                           th:href="@{/user(page=${i}, search=${search}, department=${department}, sortBy=${sortBy}, showInactive=${showInactive})}"
+                           th:href="@{/users(page=${i}, search=${search}, departmentId=${selectedDepartmentId}, sortBy=${sortBy}, showInactive=${showInactive})}"
                            th:text="${i + 1}">1</a>
                     </li>
 
                     <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
                         <a class="page-link"
-                           th:href="@{/user(page=${currentPage + 1}, search=${search}, department=${department}, sortBy=${sortBy}, showInactive=${showInactive})}">&raquo;</a>
+                           th:href="@{/users(page=${currentPage + 1}, search=${search}, departmentId=${selectedDepartmentId}, sortBy=${sortBy}, showInactive=${showInactive})}">&raquo;</a>
                     </li>
                 </ul>
             </nav>
