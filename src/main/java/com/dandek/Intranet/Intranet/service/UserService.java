@@ -32,7 +32,7 @@ public class UserService {
     }
 
 
-    public Page<User> findFilteredAndPaginated(int page, int itemsPerPage, String search, Integer departmentId, // ⬅️ ТИП ИЗМЕНЕН НА Integer
+    public Page<User> findFilteredAndPaginated(int page, int itemsPerPage, String search, Long departmentId, // ⬅️ ТИП ИЗМЕНЕН НА Integer
                                                String sortBy, boolean showInactive) {
 
         Sort sort = getSort(sortBy);

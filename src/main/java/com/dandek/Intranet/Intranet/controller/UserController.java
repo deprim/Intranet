@@ -36,7 +36,7 @@ public class UserController {
                                @RequestParam(defaultValue = "0", required = true) int page,
                                @RequestParam(defaultValue = "20", required = false) int itemsPerPage,
                                @RequestParam(required = false) String search,
-                               @RequestParam(required = false) Integer departmentId, // ⬅️ ПРИНИМАЕМ Integer ID
+                               @RequestParam(required = false) Long departmentId, // ⬅️ ПРИНИМАЕМ Integer ID
                                @RequestParam(required = false) String sortBy,
                                @RequestParam(defaultValue = "false") boolean showInactive) {
 

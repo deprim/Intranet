@@ -37,7 +37,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "(:departmentId IS NULL OR u.department.id = :departmentId) AND " +
             "(:showInactive = TRUE OR u.active = TRUE)")
     Page<User> findFilteredUsers(@Param("search") String search,
-                                 @Param("departmentId") Integer departmentId, // ⬅️ ПАРАМЕТР Integer
+                                 @Param("departmentId") Long departmentId, // ⬅️ ПАРАМЕТР Integer
                                  @Param("showInactive") boolean showInactive,
                                  Pageable pageable);
 
