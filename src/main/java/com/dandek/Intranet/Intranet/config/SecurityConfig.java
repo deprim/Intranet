@@ -27,14 +27,16 @@ public class SecurityConfig {
                         .loginProcessingUrl("/process_login")
                         .defaultSuccessUrl("/home", true)
                         .permitAll())
+                .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/login"))
                 // access rules
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/login", "/process_login").permitAll()
                         .requestMatchers("/register").hasRole("ADMIN")
                         .requestMatchers("/news/create").hasRole("ADMIN")
+                        .requestMatchers("/department").hasRole("ADMIN")
                         .anyRequest().authenticated()
-                ).csrf(csrf -> csrf.disable());
+                );
 
 
 

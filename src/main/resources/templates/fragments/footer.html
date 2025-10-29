@@ -3,16 +3,21 @@
 <body>
 <footer th:fragment="footer" class="site-footer mt-5">
     <div class="container">
-        <div class="row py-4">
+        <div class="row py-4 align-items-center">
             <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                <p class="mb-0">
+                <p class="mb-0 text-muted">
                     &copy; <span th:text="${#dates.year(#dates.createNow())}">2025</span>
                     All rights reserved
                 </p>
             </div>
             <div class="col-md-6 text-center text-md-end">
-                <a href="#" class="footer-link me-3">Privacy Policy</a>
-                <a href="#" class="footer-link">Support</a>
+                <a href="#" class="footer-link me-3 text-decoration-none text-muted">Privacy Policy</a>
+                <a href="https://github.com/deprim/Intranet" class="footer-link me-3 text-decoration-none text-muted">
+                    GitHub Repository
+                </a>
+                <span class="text-muted">
+                    Made with <span class="text-danger">♥</span> by <strong>Daniils Dekis</strong>
+                </span>
             </div>
         </div>
     </div>

@@ -87,6 +87,15 @@
                     </li>
 
                     <li class="nav-item ms-lg-3">
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+
+
+                    <li class="nav-item ms-lg-3">
                         <form th:action="@{/profile/toggle-ooo}" method="post">
                             <button type="submit"
                                     class="btn btn-sm"

@@ -61,10 +61,7 @@ public class DepartmentService {
     @Transactional
     public void deleteDepartment(Long id) throws DataIntegrityViolationException, InvalidDataAccessApiUsageException{
 
-
             departmentRepository.deleteById(id);
-
-
 
     }
 
