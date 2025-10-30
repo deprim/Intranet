@@ -243,9 +243,25 @@ public class User {
     }
 
 
-
     @Override
     public String toString() {
-        return fullName;
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", department=" + department +
+                ", dateOfBirth=" + dateOfBirth +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", position='" + position + '\'' +
+                ", hireDate=" + hireDate +
+                ", active=" + active +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", role='" + role + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
+                ", outOfOffice=" + outOfOffice +
+                '}';
     }
 }

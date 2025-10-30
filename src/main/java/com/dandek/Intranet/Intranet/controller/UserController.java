@@ -8,10 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 
@@ -68,6 +67,39 @@ public class UserController {
         model.addAttribute("yearsAtCompany", userService.timeInCompany(user));
 
         return "profile";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String showUserEditPage(@PathVariable("id") Long id, Model model) {
+
+        model.addAttribute("user", userService.findById(id));
+        model.addAttribute("departments", departmentService.findAll());
+        return "editUserProfile";
+
+    }
+
+    @PostMapping("/edit/{id}")
+    public String editUserProfile(@PathVariable("id") Long id,
+                                  @ModelAttribute User editedUser,
+                                  @RequestParam(value = "department.id", required = false) Long departmentId,
+                                  BindingResult bindingResult,
+                                  RedirectAttributes redirectAttributes,
+                                  Model model){
+
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errorMessage", bindingResult.getAllErrors().get(0).getDefaultMessage());
+            System.out.println("ERROR");
+            return "redirect:/user/edit/" + id;
+        } else {
+            Department department = departmentService.findById(departmentId);
+            userService.editUser(editedUser, departmentId);
+        }
+        return "redirect:/user/" + id;
+
+
+
+
     }
 
 }

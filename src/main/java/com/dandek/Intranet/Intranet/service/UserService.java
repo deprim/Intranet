@@ -1,5 +1,6 @@
 package com.dandek.Intranet.Intranet.service;
 
+import com.dandek.Intranet.Intranet.model.Department;
 import com.dandek.Intranet.Intranet.model.User;
 import com.dandek.Intranet.Intranet.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
@@ -19,10 +22,14 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -205,6 +212,22 @@ public class UserService {
             user.setOutOfOffice(true);
         }
         userRepository.save(user);
+
+    }
+
+    @Transactional
+    public void editUser(User editedUser, Long departmentId){
+
+        User userOld = userRepository.findById(editedUser.getId()).orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+
+        editedUser.getDepartment().setId(departmentId);
+        editedUser.setAvatarUrl(userOld.getAvatarUrl());
+        editedUser.setPassword(userOld.getPassword());
+        editedUser.setUpdatedAt(LocalDateTime.now());
+        System.out.println(editedUser);
+        userRepository.save(editedUser);
+
 
     }
 

@@ -163,7 +163,7 @@
                                class="btn btn-sm btn-outline-primary me-1">
                                 View
                             </a>
-                            <a th:href="@{/user/{id}/edit(id=${user.id})}"
+                            <a th:href="@{/user/edit/{id}(id=${user.id})}"
                                class="btn btn-sm btn-outline-secondary"
                                sec:authorize="hasRole('ADMIN')">
                                 Edit
