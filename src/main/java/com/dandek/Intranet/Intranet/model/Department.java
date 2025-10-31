@@ -42,8 +42,8 @@ public class Department {
         this.title = title;
     }
 
-    @Override
-    public String toString() {
-        return title;
-    }
+//    @Override
+//    public String toString() {
+//        return title;
+//    }
 }

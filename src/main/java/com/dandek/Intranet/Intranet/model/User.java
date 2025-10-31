@@ -3,6 +3,7 @@ package com.dandek.Intranet.Intranet.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.springframework.cglib.core.Local;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,6 +43,7 @@ public class User {
     private Department department;
 
     @Column(name = "birthday")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "Date of birth is required")
     private LocalDate dateOfBirth;
 
@@ -56,6 +58,7 @@ public class User {
 
     @Column(name = "hire_date")
     @NotNull(message = "Hire date is required")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate hireDate;
 
     @Column(name = "is_active")

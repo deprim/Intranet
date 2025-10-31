@@ -182,10 +182,14 @@ public class UserService {
         editedUser.setUpdatedAt(LocalDateTime.now()); // should be updated for NOW time
         editedUser.setRole(oldUser.getRole()); // can't be edited
 
+        System.out.println(editedUser);
+
         if (editedUser.getHireDate() == null) {
             editedUser.setHireDate(oldUser.getHireDate());
         } else if (editedUser.getDateOfBirth() == null) {
             editedUser.setDateOfBirth(oldUser.getDateOfBirth());
+        } else if (editedUser.getAvatarUrl() == null) {
+            editedUser.setAvatarUrl(oldUser.getAvatarUrl());
         }
 
         userRepository.save(editedUser);
@@ -229,6 +233,18 @@ public class UserService {
         userRepository.save(editedUser);
 
 
+    }
+
+    @Transactional
+    public void deleteUser(Long id){
+        userRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deactivateOrActivateUser(Long id){
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        user.setActive(!user.isActive());
+        userRepository.save(user);
     }
 
 

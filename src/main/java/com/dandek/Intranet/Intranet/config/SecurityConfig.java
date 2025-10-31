@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/login"))
                 // access rules
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
                         .requestMatchers("/login", "/process_login").permitAll()
                         .requestMatchers("/register").hasRole("ADMIN")
                         .requestMatchers("/news/create").hasRole("ADMIN")

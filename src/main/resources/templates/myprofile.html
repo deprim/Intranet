@@ -49,7 +49,7 @@
                             <h6 class="card-title text-muted mb-3">Quick Info</h6>
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted">Department:</span>
-                                <strong th:text="${currentUser.department}">Development</strong>
+                                <strong th:text="${currentUser.department.title}">Development</strong>
                             </div>
                             <div class="d-flex justify-content-between mb-2" th:if="${currentUser.hireDate}">
                                 <span class="text-muted">Joined:</span>
@@ -107,7 +107,7 @@
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label class="text-muted small">Department</label>
-                                    <p class="mb-0 fw-semibold" th:text="${currentUser.department}">Development</p>
+                                    <p class="mb-0 fw-semibold" th:text="${currentUser.department.title}">Development</p>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="text-muted small">Position</label>

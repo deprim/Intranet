@@ -14,12 +14,10 @@ import org.springframework.web.bind.annotation.*;
 public class EventController {
 
     private final EventService eventService;
-    private final UserService userService;
 
     @Autowired
-    public EventController(EventService eventService, UserService userService) {
+    public EventController(EventService eventService) {
         this.eventService = eventService;
-        this.userService = userService;
     }
 
     @GetMapping("/create")

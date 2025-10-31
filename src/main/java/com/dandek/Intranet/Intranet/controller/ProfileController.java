@@ -1,7 +1,9 @@
 package com.dandek.Intranet.Intranet.controller;
 
+import com.dandek.Intranet.Intranet.model.Department;
 import com.dandek.Intranet.Intranet.model.MyUserDetails;
 import com.dandek.Intranet.Intranet.model.User;
+import com.dandek.Intranet.Intranet.service.DepartmentService;
 import com.dandek.Intranet.Intranet.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +29,16 @@ import java.util.UUID;
 public class ProfileController {
 
     private final UserService userService;
+    private final DepartmentService departmentService;
 
     @Value("${upload.path}")
     private String uploadPath; // where user avatars will be stored
 
     @Autowired
-    public ProfileController(UserService userService) {
+    public ProfileController(UserService userService,
+                             DepartmentService departmentService) {
         this.userService = userService;
+        this.departmentService = departmentService;
     }
 
 
@@ -47,6 +52,8 @@ public class ProfileController {
 
         model.addAttribute("currentUser", currentUser);
 
+
+
         return "myprofile";
     }
 
@@ -58,12 +65,15 @@ public class ProfileController {
         User currentUser = userService.findById(userId);
 
         model.addAttribute("profileForm", currentUser);
+        model.addAttribute("departments", departmentService.findAll());
+
 
         return "editMyProfile";
     }
 
     @PostMapping("/edit")
     public String editProfile(@ModelAttribute("profileForm") @Valid User editedUser,
+                              @RequestParam(value = "department.id", required = false) Long departmentId,
                               BindingResult bindingResult,
                               Model model) {
 
@@ -72,10 +82,15 @@ public class ProfileController {
         Long userId = user.getUserId();
         User oldUser = userService.findById(userId);
 
+        Department department = departmentService.findById(departmentId);
+
+
         if (bindingResult.hasErrors()) {
+            editedUser.setAvatarUrl(oldUser.getAvatarUrl());
             model.addAttribute("profileForm", editedUser);
             return "editMyProfile";
         } else {
+            editedUser.setDepartment(department);
             userService.editMyProfile(oldUser, editedUser);
             return "redirect:/profile";
         }

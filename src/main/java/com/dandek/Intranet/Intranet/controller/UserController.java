@@ -97,8 +97,21 @@ public class UserController {
         }
         return "redirect:/user/" + id;
 
+    }
 
+    @PostMapping("/delete/{id}")
+    public String deleteUser(@PathVariable("id") Long id){
 
+        userService.deleteUser(id);
+        return "redirect:/user";
+
+    }
+
+    @PostMapping("/deactivate/{id}")
+    public String deactivateUser(@RequestParam("id") Long id){
+
+        userService.deactivateOrActivateUser(id);
+        return "redirect:/user/" + id;
 
     }
 

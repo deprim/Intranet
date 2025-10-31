@@ -33,7 +33,7 @@
                     </div>
 
                     <p class="text-muted mb-2" th:if="${news.author}">
-                        Author: <span th:text="${news.author}">John Doe</span>
+                        Author: <span th:text="${news.author.fullName}">John Doe</span>
                     </p>
 
                     <!-- ДОБАВЛЕН news-content-preview КЛАСС ДЛЯ ОБРЕЗКИ ЧЕРЕЗ JS -->

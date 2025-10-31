@@ -125,9 +125,17 @@
                                     <!-- Department -->
                                     <div class="col-md-6">
                                         <label for="department" class="form-label">Department</label>
-                                        <input type="text" class="form-control" id="department" th:field="*{department}"
-                                               th:classappend="${#fields.hasErrors('department') ? 'is-invalid' : ''}">
-                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('department')}" th:errors="*{department}">Department Error</div>
+                                        <select class="form-select"
+                                                id="department"
+                                                name="department.id"
+                                                required>
+                                            <option value="">Select Department</option>
+                                            <option th:each="dept : ${departments}"
+                                                    th:value="${dept.id}"
+                                                    th:text="${dept.title}"
+                                                    th:selected="${profileForm.department != null && profileForm.department.id == dept.id}">
+                                            </option>
+                                        </select>
                                     </div>
 
                                     <!-- Position -->
